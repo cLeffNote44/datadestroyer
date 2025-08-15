@@ -1,0 +1,32 @@
+# Django Core
+Django>=5.1,<5.3
+django-environ>=0.11
+
+# API and REST
+djangorestframework>=3.15
+django-filter>=24.2
+djangorestframework-simplejwt>=5.3
+drf-spectacular>=0.27
+django-cors-headers>=4.4
+
+# Authentication and Security
+django-allauth>=0.62
+django-axes>=6.1
+django-ratelimit>=4.1
+django-auditlog>=2.3
+
+# Encryption
+cryptography>=42
+django-cryptography>=1.1
+
+# File Handling and Media
+Pillow>=10.3
+python-magic-bin>=0.4
+whitenoise>=6.7
+
+# Real-time features
+channels>=4.1
+
+# Utilities
+python-dateutil>=2.8
+pytz>=2024.1
