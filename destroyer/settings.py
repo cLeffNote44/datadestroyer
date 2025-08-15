@@ -30,7 +30,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+# Django built-in apps
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,15 +40,63 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+# Third-party apps
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_filters",
+    "corsheaders",
+    "drf_spectacular",
+    "channels",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "axes",
+    "auditlog",
+]
+
+# Local/project apps
+LOCAL_APPS = [
+    "accounts.apps.AccountsConfig",
+    "analytics.apps.AnalyticsConfig",
+    "documents.apps.DocumentsConfig",
+    "exposures.apps.ExposuresConfig",
+    "forum.apps.ForumConfig",
+    "medical.apps.MedicalConfig",
+    "messaging.apps.MessagingConfig",
+    "moderation.apps.ModerationConfig",
+    "profiles.apps.ProfilesConfig",
+    "questionnaires.apps.QuestionnairesConfig",
+]
+
+# Combine all apps
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+# Add development-only apps
+if DEBUG:
+    INSTALLED_APPS += [
+        "django_extensions",
+        "debug_toolbar",
+    ]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # CORS should be early
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Static file serving
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "axes.middleware.AxesMiddleware",  # Brute force protection
+    "auditlog.middleware.AuditlogMiddleware",  # Audit logging
+    "allauth.account.middleware.AccountMiddleware",  # Django-allauth
 ]
+
+# Add debug toolbar middleware in development
+if DEBUG:
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 ROOT_URLCONF = "destroyer.urls"
 
@@ -67,6 +116,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "destroyer.wsgi.application"
+
+# Channels ASGI configuration
+ASGI_APPLICATION = "destroyer.asgi.application"
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",  # Django-axes for brute force protection
+    "django.contrib.auth.backends.ModelBackend",  # Default Django auth
+    "allauth.account.auth_backends.AuthenticationBackend",  # Django-allauth
+]
 
 
 # Database
@@ -120,3 +179,51 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Django REST Framework configuration
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# DRF Spectacular settings for API documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Data Destroyer API",
+    "DESCRIPTION": "API for secure data management and destruction",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+# CORS configuration (development)
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = [
+        # Add your production frontend URLs here
+    ]
+
+# Django Axes configuration for brute-force protection
+AXES_FAILURE_LIMIT = 5
+AXES_LOCK_OUT_AT_FAILURE = True
+AXES_COOLOFF_TIME = 1  # hours
+
+# Django Debug Toolbar configuration
+if DEBUG:
+    INTERNAL_IPS = [
+        "127.0.0.1",
+        "localhost",
+    ]
