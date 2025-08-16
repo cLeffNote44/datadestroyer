@@ -17,11 +17,17 @@ WORKDIR /app
 
 # Install dependencies first to leverage docker layer cache
 COPY requirements/ requirements/
-RUN python -m pip install --upgrade pip \
-    && pip install -r requirements/dev.txt
+# Replace windows-only dependency with linux-compatible alternative
+RUN sed -i "s/python-magic-bin.*/python-magic>=0.4/" requirements/base.txt \
+    [0m[0m&& python -m pip install --upgrade pip \
+    [0m[0m&& pip install -r requirements/dev.txt
 
 # Copy project
 COPY . .
+
+# Ensure entrypoint is executable and has LF endings
+RUN chmod +x /app/entrypoint.sh \
+    && sed -i 's/\r$//' /app/entrypoint.sh
 
 # Create a non-root user (optional)
 RUN useradd -m appuser && chown -R appuser:appuser /app
