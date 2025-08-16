@@ -1,0 +1,38 @@
+name: Prod container smoke test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and start stack (HTTP)
+        env:
+          DJANGO_SECRET_KEY: test-ci-secret-key
+          DJANGO_ALLOWED_HOSTS: 127.0.0.1,localhost
+          DJANGO_CSRF_TRUSTED_ORIGINS: http://127.0.0.1,http://localhost
+        run: |
+          docker compose -f docker-compose.prod.yml up --build -d
+
+      - name: Wait for health
+        run: |
+          for i in `seq 1 30`; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1/health/ || true)
+            if [ "$code" = "200" ]; then echo OK; exit 0; fi
+            sleep 2
+          done
+          echo "Health check failed"; docker compose -f docker-compose.prod.yml logs --no-color; exit 1
+
+      - name: Stop stack
+        if: always()
+        run: docker compose -f docker-compose.prod.yml down -v
