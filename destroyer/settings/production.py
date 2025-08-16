@@ -1,9 +1,16 @@
 import os
+from pathlib import Path
 
 from .settings import *  # noqa
 
 # Production overrides
 DEBUG = False
+
+# Compute BASE_DIR locally to avoid F405 from star import
+BASE_DIR = Path(__file__).resolve().parent.parent
+# Static files (served by WhiteNoise or proxy)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = "static/"
 
 # Secret key must come from environment in production
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
@@ -39,6 +46,16 @@ if os.environ.get("DJANGO_SECURE_PROXY_SSL_HEADER", "1") == "1":
 CORS_ALLOWED_ORIGINS = [
     o.strip() for o in os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()
 ]
+
+# Logging (basic console logging suitable for JSON collection)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "root": {"handlers": ["console"], "level": os.getenv("DJANGO_LOG_LEVEL", "INFO")},
+}
 
 # Debug toolbar and other dev-only apps/middleware should not be added here.
 # Base settings only append them when DEBUG is True.
