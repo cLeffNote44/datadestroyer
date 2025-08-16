@@ -18,6 +18,9 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
+from .views import health, ready
 
 # Brand the Django admin site
 admin.site.site_header = "Data Destroyer Administration"
@@ -26,6 +29,16 @@ admin.site.index_title = "Admin Dashboard"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # Health and readiness endpoints
+    path("health/", health, name="health"),
+    path("ready/", ready, name="ready"),
+    # API schema and docs
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
 ]
 
 # Include Django Debug Toolbar URLs in development
@@ -36,4 +49,5 @@ if settings.DEBUG:
         urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
     except Exception:
         # If debug_toolbar isn't installed, skip including its URLs
+        pass
         pass
