@@ -19,6 +19,11 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework.routers import DefaultRouter
+
+from documents.views import DocumentViewSet
+from forum.views import PostViewSet, TopicViewSet
+from messaging.views import MessageThreadViewSet, MessageViewSet
 
 from .views import health, ready
 
@@ -27,11 +32,20 @@ admin.site.site_header = "Data Destroyer Administration"
 admin.site.site_title = "Data Destroyer Admin"
 admin.site.index_title = "Admin Dashboard"
 
+router = DefaultRouter()
+router.register(r"documents", DocumentViewSet, basename="documents")
+router.register(r"forum/topics", TopicViewSet, basename="forum-topics")
+router.register(r"forum/posts", PostViewSet, basename="forum-posts")
+router.register(r"messaging/threads", MessageThreadViewSet, basename="messaging-threads")
+router.register(r"messaging/messages", MessageViewSet, basename="messaging-messages")
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     # Health and readiness endpoints
     path("health/", health, name="health"),
     path("ready/", ready, name="ready"),
+    # API routes
+    path("api/", include(router.urls)),
     # API schema and docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
