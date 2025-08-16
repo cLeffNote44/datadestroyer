@@ -20,9 +20,12 @@ cryptography>=42
 django-cryptography>=1.1
 
 # File Handling and Media
-Pillow>=10.3
-python-magic-bin>=0.4
-whitenoise>=6.7
+Pillow>10.3
+python-magic-bin>0.4
+whitenoise>6.7
+# Cloud storage (S3) optional
+django-storages[boto3]>1.14
+boto3>1.35
 
 # Real-time features
 channels>=4.1
