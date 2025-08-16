@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: destroyer.settings  # or destroyer.settings.production in prod
+      DJANGO_SECRET_KEY: local-dev-secret-key
+      DJANGO_ALLOWED_HOSTS: 127.0.0.1,localhost
+      DJANGO_CSRF_TRUSTED_ORIGINS: http://127.0.0.1,http://localhost
+    volumes:
+      - .:/app
+    # For Linux hosts, you may need: user: "${UID}:${GID}"
+    restart: unless-stopped
