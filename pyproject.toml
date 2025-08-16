@@ -19,3 +19,20 @@ select = [
   "F",  # pyflakes
   "I",  # isort (import sorting)
 ]
+
+[tool.mypy]
+python_version = "3.11"
+# Keep type checking practical with Django without stubs initially
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_no_return = true
+warn_return_any = false
+warn_unreachable = true
+show_error_codes = true
+# Exclude generated and non-code directories
+exclude = [
+  "migrations",
+  ".venv",
+  "tests/.*",  # tests can be gradually typed later
+]

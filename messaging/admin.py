@@ -39,7 +39,7 @@ class MessageThreadAdmin(admin.ModelAdmin):
         except Exception:
             return ", ".join([str(tp) for tp in qs.all()])
 
-    participants_list.short_description = "Participants"
+    participants_list.short_description = "Participants"  # type: ignore[attr-defined]
 
     def get_list_display(self, request):
         fields = ["subject", "participants_list"]
