@@ -1,4 +1,18 @@
 services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: destroyer
+      POSTGRES_USER: destroyer
+      POSTGRES_PASSWORD: destroyer
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U destroyer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
     ports:
@@ -8,7 +22,14 @@ services:
       DJANGO_SECRET_KEY: local-dev-secret-key
       DJANGO_ALLOWED_HOSTS: 127.0.0.1,localhost
       DJANGO_CSRF_TRUSTED_ORIGINS: http://127.0.0.1,http://localhost
+      DATABASE_URL: postgres://destroyer:destroyer@db:5432/destroyer
     volumes:
       - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
     # For Linux hosts, you may need: user: "${UID}:${GID}"
     restart: unless-stopped
+
+volumes:
+  pgdata:

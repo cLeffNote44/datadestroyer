@@ -13,20 +13,32 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from typing import List
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Environment setup (loads .env if present)
+env = environ.Env()
+# Load a .env file at project root if it exists
+env_file = BASE_DIR / ".env"
+if env_file.exists():
+    environ.Env.read_env(str(env_file))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#%r(ktwgq^s)u5&le_kd!by-)cny=$iu3@op!*0i^5(kitt(x)"
+SECRET_KEY = env(
+    "DJANGO_SECRET_KEY",
+    default="django-insecure-#%r(ktwgq^s)u5&le_kd!by-)cny=$iu3@op!*0i^5(kitt(x)",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=True)
 
-ALLOWED_HOSTS: List[str] = []
+ALLOWED_HOSTS: List[str] = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -132,11 +144,13 @@ AUTHENTICATION_BACKENDS = [
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Database
+# Use DATABASE_URL if provided (e.g., postgres://user:pass@host:5432/dbname)
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": env.db(
+        "DATABASE_URL",
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    )
 }
 
 
@@ -213,9 +227,7 @@ SPECTACULAR_SETTINGS = {
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    CORS_ALLOWED_ORIGINS: List[str] = [
-        # Add your production frontend URLs here
-    ]
+    CORS_ALLOWED_ORIGINS: List[str] = env.list("DJANGO_CORS_ALLOWED_ORIGINS", default=[])
 
 # Django Axes configuration for brute-force protection
 AXES_FAILURE_LIMIT = 5
