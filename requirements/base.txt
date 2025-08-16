@@ -25,7 +25,10 @@ python-magic-bin>0.4
 whitenoise>6.7
 # Cloud storage (S3) optional
 django-storages[boto3]>1.14
-boto3>1.35
+boto31.35
+
+# Observability
+sentry-sdk1.45
 
 # Real-time features
 channels>=4.1
