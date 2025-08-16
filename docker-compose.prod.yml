@@ -29,6 +29,7 @@ services:
         condition: service_healthy
     volumes:
       - staticfiles:/app/staticfiles
+      - mediafiles:/app/media
     expose:
       - "8000"
     restart: unless-stopped
@@ -42,8 +43,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - staticfiles:/static:ro
+      - mediafiles:/media:ro
     restart: unless-stopped
 
 volumes:
   pgdata:
   staticfiles:
+  mediafiles:
