@@ -1,10 +1,17 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
-from exposures.models import DeletionRequest, DeletionStatus, DeletionTarget, PurgeJob, PurgeJobStatus
-from documents.models import Document, DocumentStatus
-from messaging.models import Message, MessageStatus
-from forum.models import Post, PostStatus
 from django.db import transaction
+from django.utils import timezone
+
+from documents.models import Document, DocumentStatus
+from exposures.models import (
+    DeletionRequest,
+    DeletionStatus,
+    DeletionTarget,
+    PurgeJob,
+    PurgeJobStatus,
+)
+from forum.models import Post, PostStatus
+from messaging.models import Message, MessageStatus
 
 
 class Command(BaseCommand):
@@ -37,15 +44,28 @@ class Command(BaseCommand):
                             else:
                                 raise ValueError("Document not found")
                         elif req.target == DeletionTarget.USER_ALL_DATA:
-                            for doc in Document.objects.filter(owner=req.user, status__in=[DocumentStatus.ACTIVE, DocumentStatus.SCHEDULED_DELETE]):
+                            for doc in Document.objects.filter(
+                                owner=req.user,
+                                status__in=[DocumentStatus.ACTIVE, DocumentStatus.SCHEDULED_DELETE],
+                            ):
                                 doc.mark_as_deleted()
                             # Also delete user's messages and posts
-                            for m in Message.objects.filter(sender=req.user, status__in=[MessageStatus.ACTIVE, MessageStatus.SCHEDULED_DELETE]):
+                            for m in Message.objects.filter(
+                                sender=req.user,
+                                status__in=[MessageStatus.ACTIVE, MessageStatus.SCHEDULED_DELETE],
+                            ):
                                 m.mark_as_deleted()
-                            for p in Post.objects.filter(author=req.user, status__in=[PostStatus.ACTIVE, PostStatus.SCHEDULED_DELETE]):
+                            for p in Post.objects.filter(
+                                author=req.user,
+                                status__in=[PostStatus.ACTIVE, PostStatus.SCHEDULED_DELETE],
+                            ):
                                 p.mark_as_deleted()
                         elif req.target == DeletionTarget.CATEGORY and req.category_id:
-                            for doc in Document.objects.filter(owner=req.user, category_id=req.category_id, status__in=[DocumentStatus.ACTIVE, DocumentStatus.SCHEDULED_DELETE]):
+                            for doc in Document.objects.filter(
+                                owner=req.user,
+                                category_id=req.category_id,
+                                status__in=[DocumentStatus.ACTIVE, DocumentStatus.SCHEDULED_DELETE],
+                            ):
                                 doc.mark_as_deleted()
                         else:
                             raise ValueError("Unsupported or invalid target")
@@ -64,7 +84,11 @@ class Command(BaseCommand):
             # Also sweep scheduled messages and posts whose retention_date is due
             now = timezone.now()
             try:
-                msg_qs = Message.objects.filter(status=MessageStatus.SCHEDULED_DELETE, retention_date__isnull=False, retention_date__lte=now)
+                msg_qs = Message.objects.filter(
+                    status=MessageStatus.SCHEDULED_DELETE,
+                    retention_date__isnull=False,
+                    retention_date__lte=now,
+                )
                 for m in msg_qs.iterator():
                     try:
                         m.mark_as_deleted()
@@ -73,7 +97,11 @@ class Command(BaseCommand):
                     except Exception as e:
                         failed += 1
                         logs.append({"message": str(m.id), "result": "failed", "error": str(e)})
-                post_qs = Post.objects.filter(status=PostStatus.SCHEDULED_DELETE, retention_date__isnull=False, retention_date__lte=now)
+                post_qs = Post.objects.filter(
+                    status=PostStatus.SCHEDULED_DELETE,
+                    retention_date__isnull=False,
+                    retention_date__lte=now,
+                )
                 for p in post_qs.iterator():
                     try:
                         p.mark_as_deleted()
@@ -91,7 +119,9 @@ class Command(BaseCommand):
             job.items_failed = failed
             job.finished_at = now
             job.log = logs
-            job.save(update_fields=["status", "items_succeeded", "items_failed", "finished_at", "log"])
+            job.save(
+                update_fields=["status", "items_succeeded", "items_failed", "finished_at", "log"]
+            )
 
         except Exception as e:
             job.status = PurgeJobStatus.FAILED
@@ -100,4 +130,3 @@ class Command(BaseCommand):
             job.log = logs
             job.save(update_fields=["status", "finished_at", "log"])
             raise
-

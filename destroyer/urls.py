@@ -15,9 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+
+# Brand the Django admin site
+admin.site.site_header = "Data Destroyer Administration"
+admin.site.site_title = "Data Destroyer Admin"
+admin.site.index_title = "Admin Dashboard"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 ]
+
+# Include Django Debug Toolbar URLs in development
+if settings.DEBUG:
+    try:
+        import debug_toolbar  # noqa: F401
+
+        urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
+    except Exception:
+        # If debug_toolbar isn't installed, skip including its URLs
+        pass

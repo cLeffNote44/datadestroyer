@@ -1,8 +1,9 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 import uuid
+
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -21,10 +22,13 @@ class EncryptionMethod(models.TextChoices):
 
 class MessageThread(models.Model):
     """A conversation between two or more users."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.CharField(max_length=255, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_threads")
-    participants = models.ManyToManyField(User, through="ThreadParticipant", related_name="message_threads")
+    participants = models.ManyToManyField(
+        User, through="ThreadParticipant", related_name="message_threads"
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -37,7 +41,9 @@ class MessageThread(models.Model):
 
 
 class ThreadParticipant(models.Model):
-    thread = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name="thread_participants")
+    thread = models.ForeignKey(
+        MessageThread, on_delete=models.CASCADE, related_name="thread_participants"
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="thread_participations")
     joined_at = models.DateTimeField(auto_now_add=True)
     muted = models.BooleanField(default=False)
@@ -53,13 +59,19 @@ class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
 
     # Optional direct recipient hint for 1:1 threads; for group threads it's implied by participants
-    recipient = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="received_messages")
+    recipient = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="received_messages"
+    )
 
     content = models.TextField()
     is_encrypted = models.BooleanField(default=False)
-    encryption_method = models.CharField(max_length=20, choices=EncryptionMethod.choices, default=EncryptionMethod.NONE)
+    encryption_method = models.CharField(
+        max_length=20, choices=EncryptionMethod.choices, default=EncryptionMethod.NONE
+    )
 
-    status = models.CharField(max_length=20, choices=MessageStatus.choices, default=MessageStatus.ACTIVE)
+    status = models.CharField(
+        max_length=20, choices=MessageStatus.choices, default=MessageStatus.ACTIVE
+    )
     retention_date = models.DateTimeField(null=True, blank=True)
     deletion_date = models.DateTimeField(null=True, blank=True)
 

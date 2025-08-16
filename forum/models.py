@@ -1,8 +1,9 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 import uuid
+
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -42,7 +43,9 @@ class Topic(models.Model):
     category = models.ForeignKey(ForumCategory, on_delete=models.CASCADE, related_name="topics")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="topics")
     title = models.CharField(max_length=255)
-    status = models.CharField(max_length=20, choices=TopicStatus.choices, default=TopicStatus.ACTIVE)
+    status = models.CharField(
+        max_length=20, choices=TopicStatus.choices, default=TopicStatus.ACTIVE
+    )
 
     retention_date = models.DateTimeField(null=True, blank=True)
 

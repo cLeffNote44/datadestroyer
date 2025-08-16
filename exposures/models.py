@@ -1,10 +1,10 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
-from django.db import transaction
-from typing import Optional
 import uuid
+from typing import Optional
+
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -34,14 +34,23 @@ class DeletionTarget(models.TextChoices):
 
 class RetentionPolicy(models.Model):
     """Reusable retention rules. Can be global or scoped to a user or category."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=120)
     description = models.TextField(blank=True)
     days = models.PositiveIntegerField(default=90)
 
     # Optional scoping
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="retention_policies")
-    category = models.ForeignKey("documents.DocumentCategory", null=True, blank=True, on_delete=models.CASCADE, related_name="retention_policies")
+    user = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.CASCADE, related_name="retention_policies"
+    )
+    category = models.ForeignKey(
+        "documents.DocumentCategory",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="retention_policies",
+    )
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -66,6 +75,7 @@ class RetentionPolicy(models.Model):
 
 class DeletionRequest(models.Model):
     """Tracks deletion requests for documents or user data."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="deletion_requests")
 
@@ -92,10 +102,18 @@ class DeletionRequest(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
-    status = models.CharField(max_length=20, choices=DeletionStatus.choices, default=DeletionStatus.REQUESTED)
+    status = models.CharField(
+        max_length=20, choices=DeletionStatus.choices, default=DeletionStatus.REQUESTED
+    )
     failure_reason = models.TextField(blank=True)
 
-    retention_policy = models.ForeignKey(RetentionPolicy, null=True, blank=True, on_delete=models.SET_NULL, related_name="deletion_requests")
+    retention_policy = models.ForeignKey(
+        RetentionPolicy,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="deletion_requests",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -115,7 +133,10 @@ class DeletionRequest(models.Model):
     def approve(self, schedule_time: Optional[timezone.datetime] = None):
         self.status = DeletionStatus.APPROVED
         self.approved_at = timezone.now()
-        self.scheduled_for = schedule_time or (timezone.now() + timezone.timedelta(days=self.retention_policy.days if self.retention_policy else 0))
+        self.scheduled_for = schedule_time or (
+            timezone.now()
+            + timezone.timedelta(days=self.retention_policy.days if self.retention_policy else 0)
+        )
         self.save(update_fields=["status", "approved_at", "scheduled_for", "updated_at"])
 
 
@@ -128,9 +149,14 @@ class PurgeJobStatus(models.TextChoices):
 
 class PurgeJob(models.Model):
     """Represents a batch purge execution."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    triggered_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="triggered_purge_jobs")
-    status = models.CharField(max_length=20, choices=PurgeJobStatus.choices, default=PurgeJobStatus.PENDING)
+    triggered_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="triggered_purge_jobs"
+    )
+    status = models.CharField(
+        max_length=20, choices=PurgeJobStatus.choices, default=PurgeJobStatus.PENDING
+    )
     started_at = models.DateTimeField(null=True, blank=True)
     finished_at = models.DateTimeField(null=True, blank=True)
 
@@ -152,12 +178,18 @@ class PurgeJob(models.Model):
 
 class ExposureIncident(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    reporter = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="reported_incidents")
-    impacted_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="incidents")
+    reporter = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="reported_incidents"
+    )
+    impacted_user = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="incidents"
+    )
 
     severity = models.CharField(max_length=10, choices=Severity.choices, default=Severity.LOW)
     description = models.TextField()
-    impacted_documents = models.ManyToManyField("documents.Document", blank=True, related_name="incidents")
+    impacted_documents = models.ManyToManyField(
+        "documents.Document", blank=True, related_name="incidents"
+    )
 
     detected_at = models.DateTimeField(default=timezone.now)
     resolved_at = models.DateTimeField(null=True, blank=True)
@@ -185,7 +217,9 @@ class DataExportStatus(models.TextChoices):
 class DataExportRequest(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="data_exports")
-    status = models.CharField(max_length=20, choices=DataExportStatus.choices, default=DataExportStatus.REQUESTED)
+    status = models.CharField(
+        max_length=20, choices=DataExportStatus.choices, default=DataExportStatus.REQUESTED
+    )
 
     requested_at = models.DateTimeField(auto_now_add=True)
     fulfilled_at = models.DateTimeField(null=True, blank=True)
