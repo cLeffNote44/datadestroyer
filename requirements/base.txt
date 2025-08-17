@@ -2,6 +2,9 @@
 Django>=5.1,<5.3
 django-environ>=0.11
 
+# Database drivers
+psycopg[binary]>=3.1
+
 # API and REST
 djangorestframework>=3.15
 django-filter>=24.2
@@ -25,10 +28,10 @@ python-magic-bin>0.4
 whitenoise>6.7
 # Cloud storage (S3) optional
 django-storages[boto3]>1.14
-boto31.35
+boto3>=1.35
 
 # Observability
-sentry-sdk1.45
+sentry-sdk>=1.45
 
 # Real-time features
 channels>=4.1
