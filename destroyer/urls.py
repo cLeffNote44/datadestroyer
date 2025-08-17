@@ -25,7 +25,7 @@ from documents.views import DocumentViewSet
 from forum.views import PostViewSet, TopicViewSet
 from messaging.views import MessageThreadViewSet, MessageViewSet
 
-from .views import health, ready
+from .views import health, home, ready
 
 # Brand the Django admin site
 admin.site.site_header = "Data Destroyer Administration"
@@ -41,6 +41,8 @@ router.register(r"messaging/messages", MessageViewSet, basename="messaging-messa
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # Root
+    path("", home, name="home"),
     # Health and readiness endpoints
     path("health/", health, name="health"),
     path("ready/", ready, name="ready"),

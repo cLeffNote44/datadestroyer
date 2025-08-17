@@ -11,6 +11,9 @@ class DocumentCategorySerializer(serializers.ModelSerializer):
 
 class DocumentSerializer(serializers.ModelSerializer):
     category = DocumentCategorySerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        source="category", queryset=DocumentCategory.objects.all(), write_only=True, allow_null=True
+    )
 
     class Meta:
         model = Document
@@ -19,10 +22,22 @@ class DocumentSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "category",
+            "category_id",
+            "is_public",
+            "tags",
+            "metadata",
             "file_size",
             "mime_type",
             "status",
             "created_at",
             "updated_at",
         ]
-        read_only_fields = fields
+        read_only_fields = [
+            "id",
+            "category",
+            "file_size",
+            "mime_type",
+            "status",
+            "created_at",
+            "updated_at",
+        ]

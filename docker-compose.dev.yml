@@ -1,0 +1,32 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: data-destroyer-dev:latest
+    environment:
+      - DJANGO_SETTINGS_MODULE=destroyer.settings
+      - DEBUG=1
+    volumes:
+      - ./:/app
+      - dev-static:/app/static
+      - dev-media:/app/media
+    ports:
+      - "8000:8000"
+    depends_on: []
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - dev-static:/static:ro
+      - dev-media:/media:ro
+    depends_on:
+      - web
+
+volumes:
+  dev-static: {}
+  dev-media: {}
+

@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 
 
 def health(request):
@@ -8,3 +8,7 @@ def health(request):
 def ready(request):
     # In a more advanced setup, check DB and cache connections here
     return JsonResponse({"status": "ready"})
+
+
+def home(request):
+    return HttpResponse("It works")

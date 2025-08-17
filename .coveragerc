@@ -1,0 +1,30 @@
+[run]
+branch = True
+source =
+    destroyer
+    accounts
+    analytics
+    documents
+    exposures
+    forum
+    medical
+    messaging
+    moderation
+    profiles
+    questionnaires
+
+disable_warnings = no-data-collected
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    if __name__ == .__main__.:
+
+ignore_errors = True
+show_missing = True
+skip_covered = True
+
+[html]
+directory = htmlcov
+
