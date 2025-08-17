@@ -1,1 +1,10 @@
-#!/usr/bin/env sh\nset -e\n\n# Require production settings unless explicitly overridden\nexport DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-destroyer.settings.production}"\n\npython manage.py migrate --noinput\npython manage.py collectstatic --noinput\n\nexec "$@"\n
+#!/usr/bin/env sh
+set -e
+
+# Use base settings by default unless explicitly overridden
+export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-destroyer.settings}"
+
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+
+exec "$@"
