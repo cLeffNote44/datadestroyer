@@ -1,9 +1,1 @@
-#!/usr/bin/env sh
-set -e
-
-# Default to dev settings unless DJANGO_SETTINGS_MODULE is provided
-export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-destroyer.settings}"
-
-python manage.py migrate --noinput
-
-exec "$@"
+#!/usr/bin/env sh\nset -e\n\n# Default to dev settings unless DJANGO_SETTINGS_MODULE is provided\nexport DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-destroyer.settings}"\n\npython manage.py migrate --noinput\n\nexec "$@"\n
