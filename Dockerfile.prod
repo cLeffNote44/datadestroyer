@@ -24,11 +24,15 @@ COPY . .
 # Ensure entrypoint is executable with LF endings
 RUN chmod +x /app/entrypoint.prod.sh && sed -i 's/\r$//' /app/entrypoint.prod.sh
 
-# Use non-root user
-RUN useradd -m appuser && chown -R appuser:appuser /app
-USER appuser
+# Create non-root user and prepare static dir with correct ownership
+RUN useradd -m appuser \
+    && mkdir -p /app/staticfiles /app/media \
+    && chown -R appuser:appuser /app/staticfiles /app/media /app
+
+# Run as root, but drop privileges in Gunicorn
+USER root
 
 EXPOSE 8000
 
 ENTRYPOINT ["/app/entrypoint.prod.sh"]
-CMD ["gunicorn", "destroyer.wsgi:application", "-c", "/app/gunicorn.conf.py"]
+CMD ["gunicorn", "destroyer.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--user", "appuser", "--group", "appuser", "--log-level", "info"]
