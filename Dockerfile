@@ -37,4 +37,5 @@ EXPOSE 8000
 
 # Entrypoint handles migrations before starting dev server
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Disable Django autoreloader in containers to avoid double-fork issues
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--noreload"]
