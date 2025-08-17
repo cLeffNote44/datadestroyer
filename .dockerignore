@@ -17,4 +17,5 @@ staticfiles/
 media/
 
 # Local generated document test files
-/documents/
+# (do not exclude the Django app package)
+# /documents/
