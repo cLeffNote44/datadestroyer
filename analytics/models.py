@@ -80,6 +80,31 @@ class AnalyticsSnapshot(models.Model):
         help_text=_("Content moderation compliance score"),
     )
 
+    # Discovery system metrics
+    total_data_assets = models.IntegerField(
+        default=0, help_text=_("Total number of discovered data assets")
+    )
+    classified_assets_count = models.IntegerField(
+        default=0, help_text=_("Number of assets with classification results")
+    )
+    sensitive_assets_count = models.IntegerField(
+        default=0, help_text=_("Number of assets classified as sensitive (high/critical)")
+    )
+    discovery_insights_count = models.IntegerField(
+        default=0, help_text=_("Number of active discovery insights")
+    )
+    avg_classification_confidence = models.FloatField(
+        default=0.0, help_text=_("Average confidence score of classifications (0.0-1.0)")
+    )
+    data_lineage_relationships = models.IntegerField(
+        default=0, help_text=_("Number of data lineage relationships tracked")
+    )
+    discovery_coverage_score = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text=_("Data discovery coverage score (0-100)"),
+    )
+
     # Calculated scores (0-100)
     privacy_score = models.IntegerField(
         default=0,
@@ -151,6 +176,26 @@ class AnalyticsSnapshot(models.Model):
 
         # Deduct points for quarantined items (NEW)
         score -= min(self.quarantined_items_count * 3, 10)  # Max 10 point penalty
+
+        # Discovery system penalties (NEW)
+        # Deduct points for sensitive assets that aren't properly managed
+        if self.total_data_assets > 0:
+            sensitive_ratio = self.sensitive_assets_count / self.total_data_assets
+            if sensitive_ratio > 0.2:  # More than 20% sensitive
+                score -= int((sensitive_ratio - 0.2) * 30)  # Progressive penalty
+        
+        # Deduct points for unclassified assets (lack of visibility)
+        if self.total_data_assets > 0:
+            classified_ratio = self.classified_assets_count / self.total_data_assets
+            score -= int((1 - classified_ratio) * 15)  # Max 15 point penalty for poor classification coverage
+        
+        # Deduct points for low classification confidence
+        if self.avg_classification_confidence > 0 and self.avg_classification_confidence < 0.7:
+            confidence_penalty = int((0.7 - self.avg_classification_confidence) * 20)
+            score -= min(confidence_penalty, 10)  # Max 10 point penalty
+        
+        # Deduct points for active discovery insights (unresolved issues)
+        score -= min(self.discovery_insights_count * 2, 15)  # Max 15 point penalty
 
         return max(0, min(100, score))
 
