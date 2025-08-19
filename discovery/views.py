@@ -18,6 +18,7 @@ from .models import (
 )
 from .scanner import data_discovery_scanner
 from .classification_engine import classification_engine
+from .governance import GovernanceOrchestrator
 
 
 class DiscoveryDashboardView(generics.GenericAPIView):
@@ -112,4 +113,139 @@ class DiscoveryDashboardView(generics.GenericAPIView):
                     status='completed'
                 ).exists() else None
             }
+        })
+
+
+class GovernanceDashboardView(generics.GenericAPIView):
+    """Governance and compliance metrics dashboard"""
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """Get governance dashboard data"""
+        framework = request.GET.get('framework')
+        
+        # Initialize governance orchestrator
+        orchestrator = GovernanceOrchestrator()
+        
+        # Get assets with governance policies applied
+        assets_with_governance = DataAsset.objects.filter(
+            metadata__applied_policies__isnull=False
+        ).distinct().count()
+        
+        total_assets = DataAsset.objects.filter(is_active=True).count()
+        governance_coverage = assets_with_governance / total_assets if total_assets > 0 else 0
+        
+        # Get policy distribution
+        policy_distribution = {}
+        assets_with_policies = DataAsset.objects.filter(
+            is_active=True,
+            metadata__applied_policies__isnull=False
+        )
+        
+        for asset in assets_with_policies:
+            if asset.metadata and 'applied_policies' in asset.metadata:
+                for policy in asset.metadata['applied_policies']:
+                    policy_distribution[policy] = policy_distribution.get(policy, 0) + 1
+        
+        # Get retention metrics
+        assets_with_retention = DataAsset.objects.filter(
+            is_active=True,
+            metadata__retention_date__isnull=False
+        ).count()
+        retention_coverage = assets_with_retention / total_assets if total_assets > 0 else 0
+        
+        # Get assets due for retention
+        assets_due_for_retention = len(orchestrator.retention_engine.get_assets_for_retention())
+        
+        # Get classification type coverage
+        classification_types = ClassificationResult.objects.values_list(
+            'classification_type', flat=True
+        ).distinct()
+        
+        type_coverage = {}
+        for cls_type in classification_types:
+            assets_with_type = DataAsset.objects.filter(
+                is_active=True,
+                classificationresult__classification_type=cls_type
+            ).distinct().count()
+            assets_with_governance_by_type = DataAsset.objects.filter(
+                is_active=True,
+                classificationresult__classification_type=cls_type,
+                metadata__applied_policies__isnull=False
+            ).distinct().count()
+            
+            coverage = assets_with_governance_by_type / assets_with_type if assets_with_type > 0 else 0
+            type_coverage[cls_type] = {
+                'total_assets': assets_with_type,
+                'governed_assets': assets_with_governance_by_type,
+                'coverage': coverage
+            }
+        
+        # Generate compliance report summary
+        try:
+            compliance_report = orchestrator.generate_compliance_report(framework=framework)
+        except Exception as e:
+            # Fallback compliance data
+            compliance_report = {
+                'summary': {
+                    'compliance_score': 0.0,
+                    'compliant_assets': 0,
+                    'non_compliant_assets': 0
+                },
+                'framework_results': {},
+                'top_violations': [],
+                'recommendations': []
+            }
+        
+        # Get access control recommendations by priority
+        access_recommendations = {}
+        high_priority_assets = 0
+        medium_priority_assets = 0
+        low_priority_assets = 0
+        
+        for asset in DataAsset.objects.filter(
+            is_active=True,
+            metadata__access_recommendations__isnull=False
+        ):
+            if (asset.metadata and 
+                'access_recommendations' in asset.metadata and 
+                'priority' in asset.metadata['access_recommendations']):
+                
+                priority = asset.metadata['access_recommendations']['priority']
+                access_recommendations[priority] = access_recommendations.get(priority, 0) + 1
+                
+                if priority in ['critical', 'high']:
+                    high_priority_assets += 1
+                elif priority == 'medium':
+                    medium_priority_assets += 1
+                else:
+                    low_priority_assets += 1
+        
+        return Response({
+            'governance_overview': {
+                'total_assets': total_assets,
+                'assets_with_governance': assets_with_governance,
+                'governance_coverage': governance_coverage,
+                'assets_with_retention': assets_with_retention,
+                'retention_coverage': retention_coverage,
+                'assets_due_for_retention': assets_due_for_retention
+            },
+            'policy_distribution': policy_distribution,
+            'classification_governance': type_coverage,
+            'access_control': {
+                'recommendations_by_priority': access_recommendations,
+                'high_priority_assets': high_priority_assets,
+                'medium_priority_assets': medium_priority_assets,
+                'low_priority_assets': low_priority_assets
+            },
+            'compliance': {
+                'overall_score': compliance_report['summary']['compliance_score'],
+                'compliant_assets': compliance_report['summary']['compliant_assets'],
+                'non_compliant_assets': compliance_report['summary']['non_compliant_assets'],
+                'framework_scores': {name: data.get('compliance_percentage', 0) 
+                                   for name, data in compliance_report['framework_results'].items()},
+                'top_violations': compliance_report['top_violations'][:5] if compliance_report['top_violations'] else [],
+                'recommendations': compliance_report['recommendations'][:3] if compliance_report['recommendations'] else []
+            },
+            'timestamp': timezone.now().isoformat()
         })

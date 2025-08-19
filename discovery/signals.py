@@ -18,7 +18,7 @@ from django.apps import apps
 
 from .models import (
     DataAsset, RealTimeMonitor, MonitoringEvent, DataDiscoveryInsight,
-    DiscoveryJob, DataClassification, SensitivityLevel
+    DiscoveryJob, DataClassification, SensitivityLevel, ClassificationResult
 )
 from .scanner import data_discovery_scanner
 from .classification_engine import classification_engine, ContentContext
@@ -494,6 +494,61 @@ def create_default_monitors():
         
     except Exception as e:
         logger.error(f"Error creating default monitors: {e}")
+
+
+@receiver(post_save, sender=ClassificationResult)
+def handle_classification_result_created(sender, instance, created, **kwargs):
+    """Handle new classification results and apply governance automation"""
+    if not created:
+        return
+    
+    # Check for high-risk classifications that need immediate attention
+    high_risk_types = ['PII', 'PHI', 'CREDENTIALS', 'FINANCIAL']
+    
+    if instance.classification_type in high_risk_types and instance.confidence_score >= 0.8:
+        # Create a high-priority insight
+        DataDiscoveryInsight.objects.create(
+            asset=instance.data_asset,
+            insight_type='security',
+            title=f'High-risk {instance.classification_type} data detected',
+            description=f'Data classified as {instance.classification_type} with {instance.confidence_score:.1%} confidence',
+            severity='high',
+            metadata={
+                'classification_result_id': instance.id,
+                'classification_type': instance.classification_type,
+                'confidence_score': instance.confidence_score,
+                'auto_detected': True
+            }
+        )
+        
+        logger.warning(f'High-risk classification detected: {instance.classification_type} in asset {instance.data_asset.id}')
+    
+    # Apply governance workflows asynchronously
+    try:
+        import threading
+        from .governance import GovernanceOrchestrator
+        
+        def apply_governance():
+            """Apply governance workflows in background"""
+            try:
+                orchestrator = GovernanceOrchestrator()
+                result = orchestrator.process_classification_result(instance)
+                
+                logger.info(
+                    f'Governance applied to classification {instance.id}: '
+                    f"{', '.join(result.get('governance_actions', []))}"
+                )
+            except Exception as e:
+                logger.error(f'Failed to apply governance to classification {instance.id}: {str(e)}')
+        
+        # Run governance in background thread to avoid blocking
+        if instance.confidence_score >= 0.7:  # Only apply governance to medium+ confidence results
+            thread = threading.Thread(target=apply_governance)
+            thread.daemon = True
+            thread.start()
+        
+    except Exception as e:
+        logger.error(f'Error initiating governance workflow: {str(e)}')
 
 
 def initialize_real_time_monitoring():
