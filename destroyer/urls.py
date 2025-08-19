@@ -50,6 +50,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/analytics/", include("analytics.urls")),
     path("api/moderation/", include("moderation.urls")),
+    path("api/discovery/", include("discovery.urls")),
     # API schema and docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
