@@ -21,6 +21,9 @@ class MessageThreadViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsParticipant]
 
     def get_queryset(self):
+        # Handle schema introspection with fake queryset
+        if getattr(self, "swagger_fake_view", False):
+            return MessageThread.objects.none()
         return (
             MessageThread.objects.filter(participants=self.request.user)
             .order_by("-updated_at")
@@ -38,6 +41,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsParticipant]
 
     def get_queryset(self):
+        # Handle schema introspection with fake queryset
+        if getattr(self, "swagger_fake_view", False):
+            return Message.objects.none()
         return (
             Message.objects.filter(thread__participants=self.request.user)
             .select_related("thread", "sender", "recipient")

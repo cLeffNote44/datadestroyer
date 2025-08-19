@@ -48,6 +48,8 @@ urlpatterns = [
     path("ready/", ready, name="ready"),
     # API routes
     path("api/", include(router.urls)),
+    path("api/analytics/", include("analytics.urls")),
+    path("api/moderation/", include("moderation.urls")),
     # API schema and docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

@@ -1,6 +1,7 @@
 import base64
 import os
 from typing import Callable
+
 from django.http import HttpRequest, HttpResponse
 
 

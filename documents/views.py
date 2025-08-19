@@ -14,6 +14,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def get_queryset(self):
+        # Handle schema introspection with fake queryset
+        if getattr(self, "swagger_fake_view", False):
+            return Document.objects.none()
         return Document.objects.filter(owner=self.request.user).order_by("-created_at")
 
     def perform_create(self, serializer):

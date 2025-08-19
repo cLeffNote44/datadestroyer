@@ -40,6 +40,10 @@ DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS: List[str] = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
+# Add development hosts when DEBUG is enabled
+if DEBUG:
+    ALLOWED_HOSTS += ["localhost", "127.0.0.1", "testserver", "*"]
+
 
 # Application definition
 
