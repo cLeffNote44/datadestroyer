@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "accounts.apps.AccountsConfig",
     "analytics.apps.AnalyticsConfig",
+    "discovery.apps.DiscoveryConfig",
     "documents.apps.DocumentsConfig",
     "exposures.apps.ExposuresConfig",
     "forum.apps.ForumConfig",
