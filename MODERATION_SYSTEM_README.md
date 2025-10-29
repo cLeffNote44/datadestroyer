@@ -2,7 +2,7 @@
 
 ## Overview
 
-We have successfully implemented a comprehensive AI-powered content moderation system that automatically detects personally identifiable information (PII) and sensitive data in user content, generates privacy insights, and integrates seamlessly with the existing Data Destroyer analytics dashboard.
+We have successfully implemented a comprehensive AI-powered content moderation system that automatically detects personally identifiable information (PII) and sensitive data in user content, generates privacy insights, and integrates seamlessly with the existing Data Detective analytics dashboard.
 
 ## 🎯 Key Features Implemented
 
@@ -171,7 +171,7 @@ The moderation system is designed for easy extension:
 
 **Status**: ✅ **FULLY OPERATIONAL**
 
-The AI-Powered Content Moderation System with Privacy Insights is successfully implemented, tested, and integrated into the Data Destroyer platform. All core features are working as designed, and the system is ready for production use.
+The AI-Powered Content Moderation System with Privacy Insights is successfully implemented, tested, and integrated into the Data Detective platform. All core features are working as designed, and the system is ready for production use.
 
 **Key Metrics from Testing**:
 - **26 detection patterns** loaded and active

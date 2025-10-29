@@ -231,8 +231,8 @@ REST_FRAMEWORK = {
 
 # DRF Spectacular settings for API documentation
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Data Destroyer API",
-    "DESCRIPTION": "API for secure data management and destruction",
+    "TITLE": "Data Detective API",
+    "DESCRIPTION": "API for automated data discovery, classification, and governance",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }

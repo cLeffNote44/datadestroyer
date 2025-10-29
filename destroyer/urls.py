@@ -28,8 +28,8 @@ from messaging.views import MessageThreadViewSet, MessageViewSet
 from .views import health, home, ready
 
 # Brand the Django admin site
-admin.site.site_header = "Data Destroyer Administration"
-admin.site.site_title = "Data Destroyer Admin"
+admin.site.site_header = "Data Detective Administration"
+admin.site.site_title = "Data Detective Admin"
 admin.site.index_title = "Admin Dashboard"
 
 router = DefaultRouter()

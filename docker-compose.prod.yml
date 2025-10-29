@@ -15,7 +15,7 @@ services:
 
   web:
     # Use published image from GHCR for deployments
-    image: ghcr.io/cLeffNote44/datadestroyer:latest
+    image: ghcr.io/cLeffNote44/datadetective:latest
     # For local rebuilds, you can comment out the image line above and uncomment build below
     # build:
     #   context: .

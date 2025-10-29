@@ -5,7 +5,7 @@ def test_admin_index_loads(client, superuser):
     client.force_login(superuser)
     resp = client.get(reverse("admin:index"))
     assert resp.status_code == 200
-    assert b"Data Destroyer Administration" in resp.content
+    assert b"Data Detective Administration" in resp.content
 
 
 def test_documents_admin_changelist(client, superuser):

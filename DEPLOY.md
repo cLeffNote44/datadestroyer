@@ -56,16 +56,16 @@ docker compose -f docker-compose.prod.yml logs --tail 100 web
 ```
 
 7) Optional: systemd service
-Create `/etc/systemd/system/datadestroyer.service`:
+Create `/etc/systemd/system/datadetective.service`:
 ```
 [Unit]
-Description=Data Destroyer (Docker Compose)
+Description=Data Detective (Docker Compose)
 Requires=docker.service
 After=docker.service
 
 [Service]
 Type=oneshot
-WorkingDirectory=/opt/datadestroyer
+WorkingDirectory=/opt/datadetective
 ExecStart=/usr/bin/docker compose -f docker-compose.prod.yml up -d
 ExecStop=/usr/bin/docker compose -f docker-compose.prod.yml down
 RemainAfterExit=yes
@@ -78,7 +78,7 @@ WantedBy=multi-user.target
 Then enable:
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable --now datadestroyer
+sudo systemctl enable --now datadetective
 ```
 
 Notes

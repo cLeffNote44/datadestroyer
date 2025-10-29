@@ -289,7 +289,7 @@ Detected: {violation.content_scan.scanned_at.strftime('%Y-%m-%d %H:%M')}
 Please review your content and take appropriate action to protect your privacy.
 
 Best regards,
-Data Destroyer Privacy Team
+Data Detective Privacy Team
         """
         html_message = None
 
@@ -297,7 +297,7 @@ Data Destroyer Privacy Team
         send_mail(
             subject=subject,
             message=text_message,
-            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadestroyer.com"),
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadetective.com"),
             recipient_list=[user.email],
             html_message=html_message,
             fail_silently=False,
@@ -343,14 +343,14 @@ During quarantine, this content cannot be shared or accessed by others. You can 
 Please visit your dashboard to review and manage quarantined content.
 
 Best regards,
-Data Destroyer Privacy Team
+Data Detective Privacy Team
     """
 
     try:
         send_mail(
             subject=subject,
             message=text_message,
-            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadestroyer.com"),
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadetective.com"),
             recipient_list=[user.email],
             fail_silently=False,
         )
@@ -381,14 +381,14 @@ Please review your content and take appropriate action to ensure privacy complia
 Visit your dashboard to review the flagged content and resolve any issues.
 
 Best regards,
-Data Destroyer Privacy Team
+Data Detective Privacy Team
     """
 
     try:
         send_mail(
             subject=subject,
             message=text_message,
-            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadestroyer.com"),
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadetective.com"),
             recipient_list=[user.email],
             fail_silently=False,
         )
@@ -425,14 +425,14 @@ Critical violations detected across the platform:
 
 Please review the admin dashboard for detailed information and take appropriate action.
 
-This is an automated notification from the Data Destroyer privacy monitoring system.
+This is an automated notification from the Data Detective privacy monitoring system.
     """
 
     try:
         send_mail(
             subject=subject,
             message=message,
-            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadestroyer.com"),
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@datadetective.com"),
             recipient_list=[settings.ADMIN_NOTIFICATION_EMAIL],
             fail_silently=True,
         )
