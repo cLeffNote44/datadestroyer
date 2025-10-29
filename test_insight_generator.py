@@ -12,7 +12,7 @@ import sys
 import django
 
 # Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "data_destroyer.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "destroyer.settings")
 django.setup()
 
 from django.contrib.auth import get_user_model
