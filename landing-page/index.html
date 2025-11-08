@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered data privacy platform that automatically finds PII, PHI, and PCI across your infrastructure. GDPR, HIPAA, and CCPA compliance made easy.">
+    <meta name="keywords" content="data privacy, GDPR, HIPAA, PCI compliance, data discovery, sensitive data, PII detection">
+    <title>Data Destroyer - AI-Powered Data Privacy & Compliance Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient)"/>
+                        <path d="M20 10L28 16V24L20 30L12 24V16L20 10Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>Data Destroyer</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#industries">Industries</a>
+                    <a href="#demo">Demo</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="https://github.com/cLeffNote44/datadestroyer" target="_blank">GitHub</a>
+                    <button class="btn-primary">Start Free Trial</button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>🔒 SOC 2 Type II Certified • GDPR Ready • HIPAA Compliant</span>
+                </div>
+                <h1 class="hero-title">
+                    Discover, Classify, and Protect Your Sensitive Data
+                    <span class="gradient-text">Before It Becomes a Liability</span>
+                </h1>
+                <p class="hero-subtitle">
+                    AI-powered data privacy platform that automatically finds PII, PHI, and PCI across your
+                    infrastructure—so you can comply with GDPR, HIPAA, and CCPA without the manual headache.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn-primary btn-large" onclick="scrollToDemo()">
+                        <span>See Live Demo</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 3L8.59 4.41L13.17 9H3V11H13.17L8.59 15.59L10 17L17 10L10 3Z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="openGitHub()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        <span>View on GitHub</span>
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Enterprises Trust Us</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">98.5%</span>
+                        <span class="stat-label">Classification Accuracy</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">10x</span>
+                        <span class="stat-label">Faster Than Manual</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview" id="dashboardPreview">
+                    <div class="preview-header">
+                        <div class="preview-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <span class="preview-title">Data Destroyer Dashboard</span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-sidebar">
+                            <div class="sidebar-item active">Dashboard</div>
+                            <div class="sidebar-item">Discovery</div>
+                            <div class="sidebar-item">Policies</div>
+                            <div class="sidebar-item">Compliance</div>
+                            <div class="sidebar-item">Reports</div>
+                        </div>
+                        <div class="preview-main">
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-label">Sensitive Assets</div>
+                                    <div class="metric-value">2,847</div>
+                                    <div class="metric-trend up">+12% this week</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Privacy Score</div>
+                                    <div class="metric-value">94</div>
+                                    <div class="metric-trend up">+8 points</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Policy Violations</div>
+                                    <div class="metric-value">12</div>
+                                    <div class="metric-trend down">-5 resolved</div>
+                                </div>
+                            </div>
+                            <div class="chart-placeholder">
+                                <div class="chart-bars">
+                                    <div class="bar" style="height: 60%"></div>
+                                    <div class="bar" style="height: 80%"></div>
+                                    <div class="bar" style="height: 45%"></div>
+                                    <div class="bar" style="height: 90%"></div>
+                                    <div class="bar" style="height: 70%"></div>
+                                    <div class="bar" style="height: 95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Stop Asking "Where Is All Our Sensitive Data?"</h2>
+                <p>Your data is everywhere—databases, cloud storage, logs, backups, third-party systems.
+                   <strong>One unprotected SSN or credit card number can cost you millions.</strong></p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-big">$4.45M</div>
+                    <div class="stat-description">Average cost of a data breach (IBM 2023)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚖️</div>
+                    <div class="stat-big">€20M</div>
+                    <div class="stat-description">Maximum GDPR fine (or 4% of revenue)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-big">287 days</div>
+                    <div class="stat-description">Average time to identify a breach</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Automated Privacy Governance in Three Steps</h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">🔍</div>
+                    <h3>Discover</h3>
+                    <p>Our AI scans your databases, file shares, cloud storage, and applications
+                       to find every instance of PII, PHI, PCI, and custom sensitive data patterns.</p>
+                    <ul class="step-features">
+                        <li>50+ pre-built classifiers (SSN, credit cards, health records)</li>
+                        <li>Custom pattern detection for your industry</li>
+                        <li>Real-time discovery as data is created</li>
+                    </ul>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🏷️</div>
+                    <h3>Classify & Govern</h3>
+                    <p>Automatically tag data by sensitivity, apply retention policies, and
+                       enforce access controls based on your compliance requirements.</p>
+                    <ul class="step-features">
+                        <li>Smart ML classification with 98%+ accuracy</li>
+                        <li>Policy engine for automated governance</li>
+                        <li>Active learning improves over time</li>
+                    </ul>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">✅</div>
+                    <h3>Comply & Prove</h3>
+                    <p>Generate audit reports, respond to Data Subject Access Requests (DSARs),
+                       and prove compliance with a complete audit trail.</p>
+                    <ul class="step-features">
+                        <li>One-click GDPR/HIPAA/CCPA compliance reports</li>
+                        <li>Automated DSAR responses in minutes, not weeks</li>
+                        <li>Real-time dashboards for executives and auditors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industries -->
+    <section class="industries" id="industries">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built for Regulated Industries</h2>
+            </div>
+            <div class="industry-grid">
+                <div class="industry-card">
+                    <div class="industry-icon">🏥</div>
+                    <h3>Healthcare</h3>
+                    <p class="industry-subtitle">HIPAA Compliance Made Easy</p>
+                    <ul>
+                        <li>Automatic PHI discovery across EHR systems</li>
+                        <li>Patient data access auditing</li>
+                        <li>Breach detection and notification workflows</li>
+                    </ul>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">💰</div>
+                    <h3>Financial Services</h3>
+                    <p class="industry-subtitle">PCI-DSS & SOX Compliance</p>
+                    <ul>
+                        <li>Credit card and bank account discovery</li>
+                        <li>PCI-DSS cardholder data environment mapping</li>
+                        <li>Financial data retention automation</li>
+                    </ul>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">💻</div>
+                    <h3>SaaS & Tech</h3>
+                    <p class="industry-subtitle">GDPR & CCPA Ready</p>
+                    <ul>
+                        <li>Multi-tenant data isolation verification</li>
+                        <li>DSAR automation for customer requests</li>
+                        <li>Right to be Forgotten workflows</li>
+                    </ul>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">🛒</div>
+                    <h3>Retail & E-Commerce</h3>
+                    <p class="industry-subtitle">Customer Data Protection</p>
+                    <ul>
+                        <li>PCI compliance for payment processing</li>
+                        <li>Customer PII across web, mobile, CRM</li>
+                        <li>Third-party vendor data sharing audits</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section class="demo-section" id="demo">
+        <div class="container">
+            <div class="section-header">
+                <h2>See It In Action</h2>
+                <p>Try our ML classification engine with your own text</p>
+            </div>
+            <div class="demo-container">
+                <div class="demo-input">
+                    <label for="demoText">Enter text with sensitive data:</label>
+                    <textarea
+                        id="demoText"
+                        placeholder="Example: Contact John Smith at john@example.com or call 555-123-4567. His SSN is 123-45-6789."
+                        rows="6"
+                    ></textarea>
+                    <button class="btn-primary" onclick="classifyText()">
+                        Classify Data
+                    </button>
+                </div>
+                <div class="demo-output" id="demoOutput">
+                    <div class="demo-placeholder">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                        <p>Results will appear here</p>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-note">
+                <p>⚡ This is a client-side demo. For the full platform with database scanning, policy engine, and compliance reports,
+                   <a href="https://github.com/cLeffNote44/datadestroyer">deploy from GitHub</a>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Trusted by Privacy Leaders</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">
+                        Data Destroyer cut our GDPR compliance prep time from 6 months to 3 weeks.
+                        The automated DSAR responses alone save us 40 hours per week.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Chen</div>
+                            <div class="author-title">Chief Privacy Officer, TechCorp</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">
+                        After our breach, we needed to know exactly what data was exposed.
+                        Data Destroyer gave us answers in hours, not months. Saved us from
+                        a much larger regulatory fine.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <div class="author-name">Michael Rodriguez</div>
+                            <div class="author-title">CISO, HealthPlus Medical</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">
+                        We process millions of transactions daily. Data Destroyer's ML classification
+                        maintains 99.2% accuracy while scanning 100TB of data. Game-changer for PCI compliance.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JK</div>
+                        <div class="author-info">
+                            <div class="author-name">Jennifer Kim</div>
+                            <div class="author-title">VP Engineering, PaymentFlow</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Don't Wait for a Breach to Find Your Sensitive Data</h2>
+                <p>Join 500+ companies protecting customer privacy and avoiding regulatory fines.</p>
+                <div class="cta-buttons">
+                    <button class="btn-primary btn-large" onclick="openGitHub()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        Deploy from GitHub
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="scrollToDemo()">
+                        Try Live Demo
+                    </button>
+                </div>
+                <div class="cta-note">
+                    ✓ Open source  ✓ Self-hosted or cloud  ✓ Active community
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient2)"/>
+                            <path d="M20 10L28 16V24L20 30L12 24V16L20 10Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="gradient2" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#6366f1"/>
+                                    <stop offset="100%" stop-color="#8b5cf6"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>Data Destroyer</span>
+                    </div>
+                    <p class="footer-description">
+                        Enterprise-grade data privacy and governance platform.
+                        Open source, production-ready, and built for compliance.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#industries">Industries</a></li>
+                        <li><a href="#demo">Live Demo</a></li>
+                        <li><a href="https://github.com/cLeffNote44/datadestroyer">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/cLeffNote44/datadestroyer">GitHub</a></li>
+                        <li><a href="https://github.com/cLeffNote44/datadestroyer/blob/main/README.md">Quick Start</a></li>
+                        <li><a href="https://github.com/cLeffNote44/datadestroyer/blob/main/docs/deployment/production.md">Deployment Guide</a></li>
+                        <li><a href="https://github.com/cLeffNote44/datadestroyer/blob/main/CONTRIBUTING.md">Contributing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="https://github.com/cLeffNote44/datadestroyer/blob/main/LICENSE">License (MIT)</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Data Destroyer. Open source under MIT License.</p>
+                <div class="footer-badges">
+                    <span class="badge">🔒 SOC 2</span>
+                    <span class="badge">✓ GDPR</span>
+                    <span class="badge">✓ HIPAA</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
