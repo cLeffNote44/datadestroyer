@@ -1,5 +1,6 @@
 # Include base requirements
 -r base.txt
+-r ml.txt
 
 # Testing
 pytest>=8.0
