@@ -1,0 +1,19 @@
+{
+  "name": "data-destroyer-landing",
+  "version": "1.0.0",
+  "description": "Data Destroyer landing page - AI-powered data privacy platform",
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "data-privacy",
+    "gdpr",
+    "hipaa",
+    "pci-compliance",
+    "data-discovery",
+    "ml-classification"
+  ],
+  "author": "Data Destroyer",
+  "license": "MIT"
+}
