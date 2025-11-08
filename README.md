@@ -2,7 +2,14 @@
 
 <div align="center">
 
-**Enterprise-grade data privacy and governance platform with AI-powered sensitive data discovery**
+**Enterprise-grade data privacy and governance platform for any company that is serious about what they do**
+
+**This software could fit perfectly in many industries, healthcare, financial servcices, Tech and SaaS Companies, Insurance, Legal, HR, Recruitment, Education, Government**
+**Any segment that needs oversight, securitty, or that just deals with Compliance.** 
+
+**This was a fun one to build! email us with feedback! cLeffNote@pm.me**
+
+
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Django 4.2+](https://img.shields.io/badge/django-4.2+-green.svg)](https://www.djangoproject.com/)
@@ -353,6 +360,5 @@ Built with:
 
 **[Documentation](docs/)** • **[API Docs](https://yourdomain.com/api/docs/)** • **[Contributing](CONTRIBUTING.md)** • **[License](LICENSE)**
 
-Made with ❤️ for data privacy
 
 </div>
