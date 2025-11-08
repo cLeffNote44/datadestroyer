@@ -1,14 +1,12 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 
+# Import comprehensive health check functions
+from core.health import health_check, liveness_check, readiness_check
 
-def health(request):
-    return JsonResponse({"status": "ok"})
-
-
-def ready(request):
-    # In a more advanced setup, check DB and cache connections here
-    return JsonResponse({"status": "ready"})
+# Use the comprehensive health check as default
+health = health_check
+ready = readiness_check
 
 
 def home(request):
-    return HttpResponse("It works")
+    return HttpResponse("Data Destroyer API - Use /api/docs/ for API documentation")

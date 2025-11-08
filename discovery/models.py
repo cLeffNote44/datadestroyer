@@ -5,6 +5,16 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+# Import ML models so Django can detect them
+from .ml_models import (  # noqa: F401
+    ClassificationFeedback,
+    MLClassificationResult,
+    MLModel,
+    ModelMetric,
+    TrainingBatch,
+    TrainingDataset,
+)
+
 User = get_user_model()
 
 

@@ -74,6 +74,7 @@ THIRD_PARTY_APPS = [
 
 # Local/project apps
 LOCAL_APPS = [
+    "core",  # Core utilities and management commands
     "accounts.apps.AccountsConfig",
     "analytics.apps.AnalyticsConfig",
     "discovery.apps.DiscoveryConfig",
