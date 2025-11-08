@@ -6,15 +6,15 @@
 
 **This software could fit perfectly in many industries:**
 
-- **Healthcare**
-- **Financial Services**
-- **Tech and SaaS Companies**
-- **Insurance**
-- **Legal**
-- **HR**
-- **Recruitment** 
-- **Education**
-- **Government**
+ **Healthcare**
+ **Financial Services**
+ **Tech and SaaS Companies**
+ **Insurance**
+ **Legal**
+ **HR**
+ **Recruitment** 
+ **Education**
+ **Government**
 
 **Any segment that needs oversight, securitty, or that just deals with Compliance.** 
 
