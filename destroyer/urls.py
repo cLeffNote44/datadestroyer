@@ -48,6 +48,7 @@ urlpatterns = [
     path("ready/", ready, name="ready"),
     # API routes
     path("api/", include(router.urls)),
+    path("api/auth/", include("accounts.urls")),
     path("api/analytics/", include("analytics.urls")),
     path("api/moderation/", include("moderation.urls")),
     path("api/discovery/", include("discovery.urls")),
