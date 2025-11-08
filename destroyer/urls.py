@@ -21,6 +21,7 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
+from core.health import liveness_check, metrics_endpoint
 from documents.views import DocumentViewSet
 from forum.views import PostViewSet, TopicViewSet
 from messaging.views import MessageThreadViewSet, MessageViewSet
@@ -43,9 +44,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # Root
     path("", home, name="home"),
-    # Health and readiness endpoints
-    path("health/", health, name="health"),
-    path("ready/", ready, name="ready"),
+    # Health and readiness endpoints (Kubernetes-compatible)
+    path("health/", health, name="health"),  # Comprehensive health check
+    path("ready/", ready, name="ready"),  # Readiness probe
+    path("alive/", liveness_check, name="alive"),  # Liveness probe
+    path("api/health/", health, name="api-health"),  # API health check
+    path("api/metrics/", metrics_endpoint, name="metrics"),  # Application metrics
     # API routes
     path("api/", include(router.urls)),
     path("api/auth/", include("accounts.urls")),
